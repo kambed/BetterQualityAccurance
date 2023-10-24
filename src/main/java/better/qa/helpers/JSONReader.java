@@ -25,7 +25,6 @@ public class JSONReader {
      * @return map
      */
     public static Map<String, Object> readJSONFile(String filePath) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             InputStream inputStream = JSONReader.class
                     .getClassLoader()
@@ -33,11 +32,10 @@ public class JSONReader {
             assert inputStream != null;
             String content = new String(inputStream.readAllBytes());
             JSONObject jsonObject = new JSONObject(content);
-            resultMap = toMap(jsonObject);
+            return toMap(jsonObject);
         } catch (IOException  e) {
             throw new RuntimeException("Failed to read JSON file: %s".formatted(filePath), e);
         }
-        return resultMap;
     }
     /**
      * Convert JSON object to map.
