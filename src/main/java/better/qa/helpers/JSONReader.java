@@ -8,8 +8,23 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JSON reader.
+ */
 public class JSONReader {
 
+    /**
+     * Hidden constructor.
+     */
+    private JSONReader() {
+    }
+
+    /**
+     * Read JSON file.
+     *
+     * @param filePath file path
+     * @return map
+     */
     public static Map<String, Object> readJSONFile(String filePath) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
