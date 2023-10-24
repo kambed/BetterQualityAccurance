@@ -3,8 +3,7 @@ package better.qa.helpers;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,15 +27,24 @@ public class JSONReader {
     public static Map<String, Object> readJSONFile(String filePath) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            InputStream inputStream = JSONReader.class
+                    .getClassLoader()
+                    .getResourceAsStream(filePath);
+            assert inputStream != null;
+            String content = new String(inputStream.readAllBytes());
             JSONObject jsonObject = new JSONObject(content);
             resultMap = toMap(jsonObject);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException  e) {
+            throw new RuntimeException("Failed to read JSON file: %s".formatted(filePath), e);
         }
         return resultMap;
     }
-
+    /**
+     * Convert JSON object to map.
+     *
+     * @param object JSON object
+     * @return map
+     */
     private static Map<String, Object> toMap(JSONObject object) {
         Map<String, Object> map = new HashMap<>();
         object.keySet().forEach(key -> {

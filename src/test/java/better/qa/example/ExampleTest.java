@@ -45,7 +45,7 @@ public class ExampleTest {
 
     @Test
     public void jsonReaderTest() {
-        Map<String, Object> jsonMap = JSONReader.readJSONFile("src/test/resources/example.json");
+        Map<String, Object> jsonMap = JSONReader.readJSONFile("example.json");
         assertThat(jsonMap.get("name").equals("Thomas"), is(true));
     }
 }
