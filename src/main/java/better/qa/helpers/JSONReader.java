@@ -19,23 +19,32 @@ public class JSONReader {
     }
 
     /**
+     * Get JSON string.
+     * @param filePath file path
+     * @return JSON string
+     */
+    public static String getJsonString(String filePath) {
+        try {
+            InputStream inputStream = JSONReader.class
+                    .getClassLoader()
+                    .getResourceAsStream(filePath);
+            assert inputStream != null;
+            return new String(inputStream.readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read JSON file: %s".formatted(filePath), e);
+        }
+    }
+
+    /**
      * Read JSON file.
      *
      * @param filePath file path
      * @return map
      */
     public static Map<String, Object> readJSONFile(String filePath) {
-        try {
-            InputStream inputStream = JSONReader.class
-                    .getClassLoader()
-                    .getResourceAsStream(filePath);
-            assert inputStream != null;
-            String content = new String(inputStream.readAllBytes());
-            JSONObject jsonObject = new JSONObject(content);
-            return toMap(jsonObject);
-        } catch (IOException  e) {
-            throw new RuntimeException("Failed to read JSON file: %s".formatted(filePath), e);
-        }
+        String content = getJsonString(filePath);
+        JSONObject jsonObject = new JSONObject(content);
+        return toMap(jsonObject);
     }
     /**
      * Convert JSON object to map.
