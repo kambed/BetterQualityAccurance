@@ -59,7 +59,7 @@ public class GetCategoryTest extends TestBase {
 
     @Test
     @Description("3. Negative testing – valid input - Attempting to get a resource that does not exist")
-    public void shouldNotGetCategoryAndCategoryDoesNotExist() {
+    public void shouldNotGetCategoryWhenCategoryWithThisIdDoesNotExist() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
@@ -70,7 +70,7 @@ public class GetCategoryTest extends TestBase {
 
     @Test
     @Description("4. Negative testing – invalid input - Invalid value for endpoint parameters")
-    public void shouldNotGetCategoryAndInvalidCategoryId() {
+    public void shouldNotGetCategoryWhenCategoryIdIsInvalid() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
