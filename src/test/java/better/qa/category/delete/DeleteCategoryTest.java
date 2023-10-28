@@ -6,17 +6,15 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import jdk.jfr.Description;
 import org.apache.http.HttpStatus;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import static io.restassured.RestAssured.given;
 
-public class DeleteCategoryByIdTest extends TestBase {
+public class DeleteCategoryTest extends TestBase {
 
     private String categoryId;
 
-    @BeforeTest
+    @BeforeMethod
     public void setUp() {
         Response response = given()
                 .when()
@@ -87,19 +85,23 @@ public class DeleteCategoryByIdTest extends TestBase {
     }
 
     @Test
-    @Description("5. Destructive testing - Wrong content-type in payload")
+    @Description("5. Destructive testing - Malformed content in request")
     public void shouldNotDeleteAnyCategoryWhenWrongContentTypePassedAndLoggedInAsAdmin() {
         given()
                 .when()
-                .header("Content-Type", ContentType.XML)
+                .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("categories/%s".formatted(categoryId)))
+                .delete(getUrlForEndpoint("categories/%s".formatted(null)))
                 .then()
                 .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
-    @AfterTest
+    @AfterMethod
     public void tearDown() {
-        given().delete(getUrlForEndpoint("categories/%s".formatted(categoryId)));
+        given()
+                .when()
+                .header("Content-Type", ContentType.JSON)
+                .header("Authorization", adminToken)
+                .delete(getUrlForEndpoint("categories/%s".formatted(categoryId)));
     }
 }
