@@ -5,7 +5,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
 import static io.restassured.RestAssured.given;
 
@@ -14,13 +16,13 @@ public class TestBase {
     protected String adminToken;
     protected String userToken;
 
-    @BeforeSuite
+    @BeforeClass
     protected void setBaseUri() {
         Dotenv dotenv = Dotenv.load();
         apiUrl = dotenv.get("API_URL");
     }
 
-    @BeforeSuite
+    @BeforeClass
     protected void setTokens() {
         Response response = given()
                 .header("Content-Type", ContentType.JSON)

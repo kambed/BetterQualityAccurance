@@ -6,17 +6,15 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import jdk.jfr.Description;
 import org.apache.http.HttpStatus;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import static io.restassured.RestAssured.given;
 
-public class DeleteCategoryByIdTest extends TestBase {
+public class DeleteCategoryTest extends TestBase {
 
     private String categoryId;
 
-    @BeforeTest
+    @BeforeMethod
     public void setUp() {
         Response response = given()
                 .when()
@@ -87,19 +85,23 @@ public class DeleteCategoryByIdTest extends TestBase {
     }
 
     @Test
-    @Description("5. Destructive testing - Wrong content-type in payload")
-    public void shouldNotDeleteAnyCategoryWhenWrongContentTypePassedAndLoggedInAsAdmin() {
+    @Description("5. Destructive testing - Malformed content in request - too long ID")
+    public void shouldNotDeleteAnyCategoryWithInvalidIDWhichIs100000CharactersLong() {
         given()
                 .when()
-                .header("Content-Type", ContentType.XML)
+                .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("categories/%s".formatted(categoryId)))
+                .delete(getUrlForEndpoint("categories/%s".formatted("x".repeat(10000))))
                 .then()
-                .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
+                .statusCode(HttpStatus.SC_REQUEST_URI_TOO_LONG);
     }
 
-    @AfterTest
+    @AfterMethod
     public void tearDown() {
-        given().delete(getUrlForEndpoint("categories/%s".formatted(categoryId)));
+        given()
+                .when()
+                .header("Content-Type", ContentType.JSON)
+                .header("Authorization", adminToken)
+                .delete(getUrlForEndpoint("categories/%s".formatted(categoryId)));
     }
 }

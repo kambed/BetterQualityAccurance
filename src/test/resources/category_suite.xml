@@ -1,0 +1,10 @@
+<suite name="CategorySuite" verbose="1" >
+    <test name="Regression1">
+        <classes>
+            <class name="better.qa.category.get.GetCategoryTest"/>
+            <class name="better.qa.category.post.CreateCategoryTest"/>
+            <class name="better.qa.category.put.EditCategoryTest"/>
+            <class name="better.qa.category.delete.DeleteCategoryTest"/>
+        </classes>
+    </test>
+</suite>
