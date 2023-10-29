@@ -55,7 +55,7 @@ public class CreateBrandTest extends TestBase {
     }
 
     @Test
-    @Description("3. Negative testing – invalid input - Trying to create a brand with already existing slug")
+    @Description("3. Negative testing – valid input - Trying to create a brand with already existing slug")
     public void shouldNotCreateBrandWhenCorrectDataAndLoggedInAsAdminAndBrandAlreadyExists() {
         ValidatableResponse body = given()
                 .when()
@@ -95,7 +95,7 @@ public class CreateBrandTest extends TestBase {
     }
 
     @Test
-    @Description("3. Negative testing – invalid input - Missing required parameter name")
+    @Description("4. Negative testing – invalid input - Missing required parameter name")
     public void shouldNotCreateBrandWhenRequiredParameterNameIsMissing() {
         given()
                 .when()
@@ -109,7 +109,7 @@ public class CreateBrandTest extends TestBase {
     }
 
     @Test
-    @Description("3. Negative testing – invalid input - Missing required parameter slug")
+    @Description("4. Negative testing – invalid input - Missing required parameter slug")
     public void shouldNotCreateBrandWhenRequiredParameterSlugIsMissing() {
         given()
                 .when()
@@ -123,7 +123,7 @@ public class CreateBrandTest extends TestBase {
     }
 
     @Test
-    @Description("3. Destructive testing – invalid input - XML instead of JSON")
+    @Description("5. Destructive testing – invalid input - XML instead of JSON")
     public void shouldNotCreateBrandWhenCorrectDataAndLoggedInAsAdminAndWrongContentTypeInPayload() {
         given()
                 .when()
