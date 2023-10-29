@@ -50,6 +50,23 @@ public class JSONReader {
     }
 
     /**
+     * Replaces parameters in JSON file with values from map.
+     * e.g. if JSON file contains "name": "{{name}}", and map contains "name" -> "John", then
+     * "name": "{{name}}" will be replaced with "name": "John"
+     *
+     * @param filePath file path
+     * @param params   map of parameters to replace in returned JSON string
+     * @return JSON string
+     */
+    public static String getJsonString(String filePath, Map<String, String> params) {
+        String content = getJsonString(filePath);
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            content = content.replace("{{%s}}".formatted(entry.getKey()), entry.getValue());
+        }
+        return content;
+    }
+
+    /**
      * Read JSON file.
      *
      * @param filePath file path
