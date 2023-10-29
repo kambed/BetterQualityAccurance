@@ -85,15 +85,15 @@ public class DeleteCategoryTest extends TestBase {
     }
 
     @Test
-    @Description("5. Destructive testing - Malformed content in request")
-    public void shouldNotDeleteAnyCategoryWhenWrongContentTypePassedAndLoggedInAsAdmin() {
+    @Description("5. Destructive testing - Malformed content in request - too long ID")
+    public void shouldNotDeleteAnyCategoryWithInvalidIDWhichIs100000CharactersLong() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("categories/%s".formatted(null)))
+                .delete(getUrlForEndpoint("categories/%s".formatted("x".repeat(10000))))
                 .then()
-                .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
+                .statusCode(HttpStatus.SC_REQUEST_URI_TOO_LONG);
     }
 
     @AfterMethod
