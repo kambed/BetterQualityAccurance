@@ -26,7 +26,7 @@ public class CreateBrandTest extends TestBase {
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
                 .body(JSONReader.getJsonString(
-                        "brand/create_brand.json",
+                        "brand/brand.json",
                         Map.of(
                                 "name", "New test brand",
                                 "slug", "new-test-brand"
@@ -62,7 +62,7 @@ public class CreateBrandTest extends TestBase {
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
                 .body(JSONReader.getJsonString(
-                        "brand/create_brand.json",
+                        "brand/brand.json",
                         Map.of(
                                 "name", "New test brand",
                                 "slug", "new-test-brand"
@@ -82,7 +82,7 @@ public class CreateBrandTest extends TestBase {
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
                 .body(JSONReader.getJsonString(
-                        "brand/create_brand.json",
+                        "brand/brand.json",
                         Map.of(
                                 "name", "New test brand",
                                 "slug", "new-test-brand"
@@ -101,7 +101,7 @@ public class CreateBrandTest extends TestBase {
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .body(JSONReader.getJsonString("brand/create_brand_missing_name.json"))
+                .body(JSONReader.getJsonString("brand/brand_only_slug.json"))
                 .post(getUrlForEndpoint("brands"))
                 .then()
                 .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY)
@@ -115,7 +115,7 @@ public class CreateBrandTest extends TestBase {
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .body(JSONReader.getJsonString("brand/create_brand_missing_slug.json"))
+                .body(JSONReader.getJsonString("brand/brand_only_name.json"))
                 .post(getUrlForEndpoint("brands"))
                 .then()
                 .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY)

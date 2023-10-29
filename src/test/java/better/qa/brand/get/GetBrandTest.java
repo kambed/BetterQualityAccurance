@@ -23,7 +23,7 @@ public class GetBrandTest extends TestBase {
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
                 .body(JSONReader.getJsonString(
-                        "brand/create_brand.json",
+                        "brand/brand.json",
                         Map.of(
                                 "name", "Test brand",
                                 "slug", "test-brand"
