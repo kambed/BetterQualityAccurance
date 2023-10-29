@@ -1,0 +1,10 @@
+<suite name="BrandSuite" verbose="1" >
+    <test name="BrandAPITests">
+        <classes>
+            <class name="better.qa.brand.get.GetBrandTest"/>
+            <class name="better.qa.brand.post.CreateBrandTest"/>
+            <class name="better.qa.brand.put.EditBrandTest"/>
+            <class name="better.qa.brand.delete.DeleteBrandTest"/>
+        </classes>
+    </test>
+</suite>
