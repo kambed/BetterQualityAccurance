@@ -85,7 +85,7 @@ public class EditCategoryTest extends TestBase {
 
     @Test
     @Description("3. Negative testing – valid input - attempting to edit a resource that does not exist")
-    public void shouldNotEditCategoryWhenCategoryWithThisIdAndLoggedInAsAdmin() {
+    public void shouldNotEditCategoryWhenCategoryWithThisIdDoesNotExistAndLoggedInAsAdmin() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
