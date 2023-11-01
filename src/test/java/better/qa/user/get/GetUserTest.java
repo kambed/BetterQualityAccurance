@@ -1,4 +1,4 @@
-package better.qa.product.get;
+package better.qa.user.get;
 
 import better.qa.TestBase;
 import better.qa.helpers.JSONReader;
@@ -12,30 +12,32 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
-public class GetProductTest extends TestBase {
+public class GetUserTest extends TestBase {
 
-    private String productId;
+    private String userId;
 
     @BeforeMethod
     public void setUp() {
         Response response = given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .body(JSONReader.getJsonString("category/create_category.json"))
-                .post(getUrlForEndpoint("categories"));
+                .body(JSONReader.getJsonString("user/create_user.json"))
+                .post(getUrlForEndpoint("users/register"));
         response.then().statusCode(HttpStatus.SC_CREATED);
-        categoryId = response.path("id");
+        userId = response.path("id");
     }
 
     @Test
     @Description("1. Basic positive tests (happy paths)")
-    public void shouldGetAllCategories() {
+    public void shouldGetAllUsers() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .get(getUrlForEndpoint("categories"))
+                .header("Authorization", adminToken)
+                .get(getUrlForEndpoint("users"))
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body("$", Matchers.not(hasSize(0)));
@@ -43,34 +45,37 @@ public class GetProductTest extends TestBase {
 
     @Test
     @Description("2. Positive + optional parameters")
-    public void shouldGetCategoryById() {
+    public void shouldGetUserById() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .get(getUrlForEndpoint("categories/%s".formatted(categoryId)))
+                .header("Authorization", adminToken)
+                .get(getUrlForEndpoint("users/%s".formatted(userId)))
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body(
-                        "id", Matchers.equalTo(categoryId),
-                        "name", Matchers.equalTo("Test category with random UUID"),
-                        "slug", Matchers.equalTo("068cd493-e45a-4fdf-804d-1ff1a0720618")
+                        "id", equalTo(userId),
+                        "email", equalTo("ExampleEmail@gmail.com"),
+                        "first_name", equalTo("John"),
+                        "last_name", equalTo("Doe")
                 );
     }
 
     @Test
     @Description("3. Negative testing – valid input - Attempting to get a resource that does not exist")
-    public void shouldNotGetCategoryWhenCategoryWithThisIdDoesNotExist() {
+    public void shouldNotGetUserWhenUserWithThisIdDoesNotExist() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .get(getUrlForEndpoint("categories/%s".formatted("non-existing-category")))
+                .header("Authorization", adminToken)
+                .get(getUrlForEndpoint("users/%s".formatted("non-existing-user")))
                 .then()
                 .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test
     @Description("4. Negative testing – invalid input - Invalid value for endpoint parameters")
-    public void shouldNotGetCategoryWhenCategoryIdIsInvalid() {
+    public void shouldNotGetUserWhenUserIdIsInvalid() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
@@ -85,9 +90,20 @@ public class GetProductTest extends TestBase {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .get(getUrlForEndpoint("categories/%s".formatted("x".repeat(10000))))
+                .get(getUrlForEndpoint("users/%s".formatted("x".repeat(10000))))
                 .then()
                 .statusCode(HttpStatus.SC_REQUEST_URI_TOO_LONG);
+    }
+
+    @Test
+    @Description("6. Security testing - Attempting to access a resource without authorization")
+    public void shouldNotGetUserWhenUserIsNotAuthorized() {
+        given()
+                .when()
+                .header("Content-Type", ContentType.JSON)
+                .get(getUrlForEndpoint("users/%s".formatted(userId)))
+                .then()
+                .statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @AfterMethod
@@ -96,6 +112,6 @@ public class GetProductTest extends TestBase {
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("categories/%s".formatted(categoryId)));
+                .delete(getUrlForEndpoint("users/%s".formatted(userId)));
     }
 }
