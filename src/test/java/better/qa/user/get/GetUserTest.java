@@ -11,6 +11,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -25,6 +27,12 @@ public class GetUserTest extends TestBase {
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .body(JSONReader.getJsonString("user/create_user.json"))
+                .body(JSONReader.getJsonString(
+                        "user/create_user.json",
+                        Map.of(
+                                "email", "ExampleEmail@gmail.com"
+                        )
+                ))
                 .post(getUrlForEndpoint("users/register"));
         response.then().statusCode(HttpStatus.SC_CREATED);
         userId = response.path("id");
@@ -33,6 +41,7 @@ public class GetUserTest extends TestBase {
     @Test
     @Description("1. Basic positive tests (happy paths)")
     public void shouldGetAllUsers() {
+        System.out.printf(adminToken);
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
