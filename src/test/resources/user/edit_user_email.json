@@ -1,0 +1,8 @@
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "address": "Street 1",
+  "city": "City",
+  "country": "Country",
+  "email": "{{email}}"
+}
