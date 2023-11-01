@@ -78,8 +78,20 @@ public class DeleteBrandTest extends TestBase {
     }
 
     @Test
-    @Description("4. Negative testing – invalid input - Invalid authorization token")
+    @Description("4. Negative testing – invalid input - Insufficient permissions")
     public void shouldNotDeleteExistingBrandByIdWhenCorrectDataAndLoggedInAsUser() {
+        given()
+                .when()
+                .header("Content-Type", ContentType.JSON)
+                .header("Authorization", userToken)
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)))
+                .then()
+                .statusCode(HttpStatus.SC_FORBIDDEN);
+    }
+
+    @Test
+    @Description("4. Negative testing – invalid input - Invalid authorization token")
+    public void shouldNotDeleteExistingBrandByIdWhenCorrectDataAndInvalidToken() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
