@@ -48,7 +48,7 @@ public class DeleteUserTest extends TestBase {
     }
 
     @Test
-    @Description("3. Negative testing – valid input - delete non existing brand")
+    @Description("3. Negative testing – valid input - delete non existing user")
     public void shouldNotDeleteNonExistingUserByIdWhenCorrectDataAndLoggedInAsAdmin() {
         given()
                 .when()
@@ -102,7 +102,7 @@ public class DeleteUserTest extends TestBase {
     }
 
     @Test
-    @Description("5. Destructive tests - get brand by invalid id with / character")
+    @Description("5. Destructive tests - get user by invalid id with / character")
     public void shouldNotDeleteUserByInvalidIdWithSpecialCharacters() {
         given()
                 .when()
