@@ -172,7 +172,6 @@ public class EditUserTest extends TestBase {
     @Test
     @Description("5. Destructive tests - invalid input - edit user by not valid body")
     public void shouldNotEditUserMissedBody() {
-        System.out.printf(adminToken);
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
