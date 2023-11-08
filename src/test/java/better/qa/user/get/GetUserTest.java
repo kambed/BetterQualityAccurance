@@ -41,7 +41,6 @@ public class GetUserTest extends TestBase {
     @Test
     @Description("1. Basic positive tests (happy paths)")
     public void shouldGetAllUsers() {
-        System.out.printf(adminToken);
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
