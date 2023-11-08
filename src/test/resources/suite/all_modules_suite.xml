@@ -1,0 +1,28 @@
+<suite name="BrandSuite" verbose="1" >
+    <tests>
+        <test name="Regression1">
+            <classes>
+                <class name="better.qa.category.get.GetCategoryTest"/>
+                <class name="better.qa.category.post.CreateCategoryTest"/>
+                <class name="better.qa.category.put.EditCategoryTest"/>
+                <class name="better.qa.category.delete.DeleteCategoryTest"/>
+            </classes>
+        </test>
+        <test name="Regression2">
+            <classes>
+                <class name="better.qa.brand.get.GetBrandTest"/>
+                <class name="better.qa.brand.post.CreateBrandTest"/>
+                <class name="better.qa.brand.put.EditBrandTest"/>
+                <class name="better.qa.brand.delete.DeleteBrandTest"/>
+            </classes>
+        </test>
+        <test name="Regression3">
+            <classes>
+                <class name="better.qa.user.get.GetUserTest"/>
+                <class name="better.qa.user.post.CreateUserTest"/>
+                <class name="better.qa.user.put.EditUserTest"/>
+                <class name="better.qa.user.delete.DeleteUserTest"/>
+            </classes>
+        </test>
+    </tests>
+</suite>
