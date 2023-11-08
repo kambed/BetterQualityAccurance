@@ -95,7 +95,7 @@ public class GetUserTest extends TestBase {
 
     @Test
     @Description("5. Destructive testing - Malformed content in request - too long ID")
-    public void shouldNotGetCategoryWithInvalidIDWhichIs100000CharactersLong() {
+    public void shouldNotGetUserWithInvalidIDWhichIs100000CharactersLong() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
