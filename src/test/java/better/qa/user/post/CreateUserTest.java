@@ -109,6 +109,17 @@ public class CreateUserTest extends TestBase {
     }
 
     @Test
+    @Description("4. Negative testing – invalid input - Missing required parameter name")
+    public void shouldNotCreateUserWhenEmptyBody() {
+        given()
+                .when()
+                .header("Content-Type", ContentType.JSON)
+                .post(getUrlForEndpoint("users/register"))
+                .then()
+                .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
+    }
+
+    @Test
     @Description("5. Destructive testing – invalid input - XML instead of JSON")
     public void shouldNotCreateUserWhenCorrectDataButWrongContentTypeInPayload() {
         given()
