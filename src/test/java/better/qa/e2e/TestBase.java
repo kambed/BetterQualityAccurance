@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
 import java.time.Duration;
@@ -26,6 +28,11 @@ public class TestBase {
         adminEmail = dotenv.get("ADMIN_EMAIL");
         adminPassword = dotenv.get("ADMIN_PASSWORD");
         driver = new ChromeDriver();
+    }
+
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
     }
 
     protected void loginAsAdmin() {
