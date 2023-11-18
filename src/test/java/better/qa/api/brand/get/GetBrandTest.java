@@ -1,6 +1,6 @@
-package better.qa.brand.get;
+package better.qa.api.brand.get;
 
-import better.qa.TestBase;
+import better.qa.api.TestBase;
 import better.qa.helpers.JSONReader;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

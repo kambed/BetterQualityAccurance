@@ -1,6 +1,6 @@
-package better.qa.user.delete;
+package better.qa.api.brand.delete;
 
-import better.qa.TestBase;
+import better.qa.api.TestBase;
 import better.qa.helpers.JSONReader;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -14,101 +14,100 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
-public class DeleteUserTest extends TestBase {
-
-    private String userId;
+public class DeleteBrandTest extends TestBase {
+    private String brandId;
 
     @BeforeMethod
     public void setUp() {
         Response response = given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .body(JSONReader.getJsonString("user/create_user.json"))
+                .header("Authorization", adminToken)
                 .body(JSONReader.getJsonString(
-                        "user/create_user.json",
+                        "brand/brand.json",
                         Map.of(
-                                "email", "ExampleEmail@gmail.com"
+                                "name", "Test brand",
+                                "slug", "test-brand"
                         )
                 ))
-                .post(getUrlForEndpoint("users/register"));
+                .post(getUrlForEndpoint("brands"));
         response.then().statusCode(HttpStatus.SC_CREATED);
-        userId = response.path("id");
+        brandId = response.path("id");
     }
 
     @Test
     @Description("1. Basic positive tests (happy paths)")
-    public void shouldDeleteExistingUserByIdWhenCorrectDataAndLoggedInAsAdmin() {
+    public void shouldDeleteExistingBrandByIdWhenCorrectDataAndLoggedInAsAdmin() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("users/%s".formatted(userId)))
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)))
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
     }
 
     @Test
-    @Description("3. Negative testing – valid input - delete non existing user")
-    public void shouldNotDeleteNonExistingUserByIdWhenCorrectDataAndLoggedInAsAdmin() {
+    @Description("3. Negative testing – valid input - delete non existing brand")
+    public void shouldNotDeleteNonExistingBrandByIdWhenCorrectDataAndLoggedInAsAdmin() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("users/%s".formatted(userId)))
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)))
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("users/%s".formatted(userId)))
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)))
                 .then()
                 .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
     @Test
     @Description("4. Negative testing – invalid input - Missing authorization header")
-    public void shouldNotDeleteExistingUserByIdWhenCorrectDataAndNotLoggedIn() {
+    public void shouldNotDeleteExistingBrandByIdWhenCorrectDataAndNotLoggedIn() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .delete(getUrlForEndpoint("users/%s".formatted(userId)))
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)))
                 .then()
                 .statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
     @Description("4. Negative testing – invalid input - Insufficient permissions")
-    public void shouldNotDeleteExistingUserByIdWhenCorrectDataAndLoggedInAsUser() {
+    public void shouldNotDeleteExistingBrandByIdWhenCorrectDataAndLoggedInAsUser() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", userToken)
-                .delete(getUrlForEndpoint("users/%s".formatted(userId)))
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)))
                 .then()
                 .statusCode(HttpStatus.SC_FORBIDDEN);
     }
 
     @Test
     @Description("4. Negative testing – invalid input - Invalid authorization token")
-    public void shouldNotDeleteExistingUserByIdWhenCorrectDataAndInvalidToken() {
+    public void shouldNotDeleteExistingBrandByIdWhenCorrectDataAndInvalidToken() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .header("Authorization", "Bad Token Case")
-                .delete(getUrlForEndpoint("users/%s".formatted(userId)))
+                .header("Authorization", "Bearer badToken")
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)))
                 .then()
                 .statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
-    @Description("5. Destructive tests - get user by invalid id with / character")
-    public void shouldNotDeleteUserByInvalidIdWithSpecialCharacters() {
+    @Description("5. Destructive tests - get brand by invalid id with / character")
+    public void shouldNotGetBrandByInvalidIdWithSpecialCharacters() {
         given()
                 .when()
                 .header("Content-Type", ContentType.JSON)
-                .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("users/%s".formatted("invalid-id/with-special-characters")))
+                .delete(getUrlForEndpoint("brands/%s".formatted("invalid-id/with-special-characters")))
                 .then()
                 .statusCode(HttpStatus.SC_NOT_FOUND)
                 .onFailMessage("Requested item not found");
@@ -120,6 +119,6 @@ public class DeleteUserTest extends TestBase {
                 .when()
                 .header("Content-Type", ContentType.JSON)
                 .header("Authorization", adminToken)
-                .delete(getUrlForEndpoint("users/%s".formatted(userId)));
+                .delete(getUrlForEndpoint("brands/%s".formatted(brandId)));
     }
 }

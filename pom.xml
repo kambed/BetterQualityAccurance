@@ -17,6 +17,7 @@
         <dotenv-java.version>3.0.0</dotenv-java.version>
         <apache-http.version>4.5.14</apache-http.version>
         <json.version>20231013</json.version>
+        <selenuim.version>4.15.0</selenuim.version>
     </properties>
 
     <dependencies>
@@ -44,6 +45,11 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${apache-http.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenuim.version}</version>
         </dependency>
     </dependencies>
 

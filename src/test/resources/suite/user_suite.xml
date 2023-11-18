@@ -1,10 +1,10 @@
 <suite name="UserSuite" verbose="3" >
     <test name="Regression3">
         <classes>
-            <class name="better.qa.user.get.GetUserTest"/>
-            <class name="better.qa.user.post.CreateUserTest"/>
-            <class name="better.qa.user.put.EditUserTest"/>
-            <class name="better.qa.user.delete.DeleteUserTest"/>
+            <class name="better.qa.api.user.get.GetUserTest"/>
+            <class name="better.qa.api.user.post.CreateUserTest"/>
+            <class name="better.qa.api.user.put.EditUserTest"/>
+            <class name="better.qa.api.user.delete.DeleteUserTest"/>
         </classes>
     </test>
 </suite>
