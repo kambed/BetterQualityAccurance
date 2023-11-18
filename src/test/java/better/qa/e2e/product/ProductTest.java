@@ -174,20 +174,6 @@ public class ProductTest extends TestBase {
         return name;
     }
 
-    private void loginAsAdmin() {
-        driver.get(WEB_URL + "#/auth/login");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        WebElement emailInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[formcontrolname='email']")));
-        emailInput.sendKeys(adminEmail);
-
-        WebElement passwordInput = driver.findElement(By.cssSelector("input[formcontrolname='password']"));
-        passwordInput.sendKeys(adminPassword);
-
-        WebElement loginButton = driver.findElement(By.cssSelector("input[data-test='login-submit']"));
-        loginButton.click();
-    }
-
     private static ExpectedCondition<Boolean> isToastPresent(By locator) {
         return driver -> !driver.findElements(locator).isEmpty();
     }
