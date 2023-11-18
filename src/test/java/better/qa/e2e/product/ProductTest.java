@@ -8,12 +8,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -59,7 +57,6 @@ public class ProductTest extends TestBase {
     @Description("ID: PRODUCTS_PUT_CORRECT, Product update with correct data")
     public void editProductWithCorrectData() throws InterruptedException {
         prepareForProductEdit(UUID);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@id='name']")));
@@ -98,7 +95,6 @@ public class ProductTest extends TestBase {
     @Description("ID: PRODUCTS_PUT_INCORRECT, Product update with incorrect data")
     public void editProductWithInCorrectData() throws InterruptedException {
         String name = prepareForProductEdit(UUID);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@id='name']")));
@@ -398,7 +394,6 @@ public class ProductTest extends TestBase {
 
     private String prepareForProductEdit(String uuid) throws InterruptedException {
         loginToAdminAccount();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1[data-test='page-title']")));
         driver.get(WEB_URL + "#/admin/products");
 
