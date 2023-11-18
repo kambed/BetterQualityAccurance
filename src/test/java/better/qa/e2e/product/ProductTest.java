@@ -188,57 +188,11 @@ public class ProductTest extends TestBase {
     public void createNewProduct() {
         //Login as admin
         loginToAdminAccount();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'John Doe')]")));
-
-        //Go to admin products page
-        WebElement accountButton = driver.findElement(By.xpath("//a[contains(text(),'John Doe')]"));
-        accountButton.click();
-        WebElement adminProductsButton = driver.findElement(By.xpath("//a[contains(text(),'Products')]"));
-        adminProductsButton.click();
-
-        //Click on add new product button
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'Add Product')]")));
-        WebElement addNewProductButton = driver.findElement(By.xpath("//a[contains(text(),'Add Product')]"));
-        addNewProductButton.click();
+        goToAddProductPage();
 
         //Fill in product details
-        WebElement name = driver.findElement(By.cssSelector("input[formcontrolname='name']"));
-        name.sendKeys("Better Hammer");
-
-        WebElement description = driver.findElement(By.cssSelector("textarea[formcontrolname='description']"));
-        description.sendKeys("Better hammer for better nails");
-
-        WebElement stock = driver.findElement(By.cssSelector("input[formcontrolname='stock']"));
-        stock.sendKeys("1");
-
-        WebElement price = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
-        price.sendKeys("12345");
-
-        WebElement itemForRent = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
-        itemForRent.click();
-
-        WebElement brand = driver.findElement(By.cssSelector("select[formcontrolname='brand_id']"));
-        Select brandSelect = new Select(brand);
-        wait.until(d -> brandSelect.getOptions().size() > 1);
-        assertEquals(brandSelect.getOptions().size(), 3);
-        assertTrue(brandSelect.getOptions().stream().map(WebElement::getText).toList().containsAll(List.of("", "Brand name 1", "Brand name 2")));
-        brandSelect.getOptions().stream().filter(option -> option.getText().equals("Brand name 1")).findFirst().orElseThrow().click();
-
-        WebElement category = driver.findElement(By.cssSelector("select[formcontrolname='category_id']"));
-        Select categorySelect = new Select(category);
-        wait.until(d -> categorySelect.getOptions().size() > 1);
-        assertEquals(categorySelect.getOptions().size(), 13);
-        assertTrue(categorySelect.getOptions().stream().map(WebElement::getText).toList().containsAll(List.of(
-                "", "Hand Tools", "Power Tools", "Other", "Hammer", "Hand Saw", "Wrench", "Screwdriver", "Pliers", "Grinder", "Sander", "Saw", "Drill")
-        ));
-        categorySelect.getOptions().stream().filter(option -> option.getText().equals("Hand Tools")).findFirst().orElseThrow().click();
-
-        WebElement image = driver.findElement(By.cssSelector("select[formcontrolname='product_image_id']"));
-        Select imageSelect = new Select(image);
-        wait.until(d -> imageSelect.getOptions().size() > 1);
-        assertEquals(imageSelect.getOptions().size(), 30);
-        assertTrue(imageSelect.getOptions().stream().map(WebElement::getText).toList().contains("Hammer"));
-        imageSelect.getOptions().stream().filter(option -> option.getText().equals("Hammer")).findFirst().orElseThrow().click();
+        fillAddProductName();
+        fillAddProductDataWithoutName();
 
         //Submit new product
         WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(),'Save')]"));
@@ -262,50 +216,10 @@ public class ProductTest extends TestBase {
     public void createNewProductWithoutName() {
         //Login as admin
         loginToAdminAccount();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'John Doe')]")));
-
-        //Go to admin products page
-        WebElement accountButton = driver.findElement(By.xpath("//a[contains(text(),'John Doe')]"));
-        accountButton.click();
-        WebElement adminProductsButton = driver.findElement(By.xpath("//a[contains(text(),'Products')]"));
-        adminProductsButton.click();
-
-        //Click on add new product button
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'Add Product')]")));
-        WebElement addNewProductButton = driver.findElement(By.xpath("//a[contains(text(),'Add Product')]"));
-        addNewProductButton.click();
+        goToAddProductPage();
 
         //Fill in product details
-        WebElement description = driver.findElement(By.cssSelector("textarea[formcontrolname='description']"));
-        description.sendKeys("Better hammer for better nails");
-
-        WebElement stock = driver.findElement(By.cssSelector("input[formcontrolname='stock']"));
-        stock.sendKeys("1");
-
-        WebElement price = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
-        price.sendKeys("12345");
-
-        WebElement itemForRent = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
-        itemForRent.click();
-
-        WebElement brand = driver.findElement(By.cssSelector("select[formcontrolname='brand_id']"));
-        Select brandSelect = new Select(brand);
-        wait.until(d -> brandSelect.getOptions().size() > 1);
-        assertEquals(brandSelect.getOptions().size(), 3);
-        brandSelect.getOptions().stream().filter(option -> option.getText().equals("Brand name 1")).findFirst().orElseThrow().click();
-
-        WebElement category = driver.findElement(By.cssSelector("select[formcontrolname='category_id']"));
-        Select categorySelect = new Select(category);
-        wait.until(d -> categorySelect.getOptions().size() > 1);
-        assertEquals(categorySelect.getOptions().size(), 13);
-        categorySelect.getOptions().stream().filter(option -> option.getText().equals("Hand Tools")).findFirst().orElseThrow().click();
-
-        WebElement image = driver.findElement(By.cssSelector("select[formcontrolname='product_image_id']"));
-        Select imageSelect = new Select(image);
-        wait.until(d -> imageSelect.getOptions().size() > 1);
-        assertEquals(imageSelect.getOptions().size(), 30);
-        assertTrue(imageSelect.getOptions().stream().map(WebElement::getText).toList().contains("Hammer"));
-        imageSelect.getOptions().stream().filter(option -> option.getText().equals("Hammer")).findFirst().orElseThrow().click();
+        fillAddProductDataWithoutName();
 
         //Submit new product
         WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(),'Save')]"));
@@ -320,53 +234,15 @@ public class ProductTest extends TestBase {
     public void createNewProductWithNegativePrice() {
         //Login as admin
         loginToAdminAccount();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'John Doe')]")));
-
-        //Go to admin products page
-        WebElement accountButton = driver.findElement(By.xpath("//a[contains(text(),'John Doe')]"));
-        accountButton.click();
-        WebElement adminProductsButton = driver.findElement(By.xpath("//a[contains(text(),'Products')]"));
-        adminProductsButton.click();
-
-        //Click on add new product button
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'Add Product')]")));
-        WebElement addNewProductButton = driver.findElement(By.xpath("//a[contains(text(),'Add Product')]"));
-        addNewProductButton.click();
+        goToAddProductPage();
 
         //Fill in product details
-        WebElement name = driver.findElement(By.cssSelector("input[formcontrolname='name']"));
-        name.sendKeys("Better Hammer");
-
-        WebElement description = driver.findElement(By.cssSelector("textarea[formcontrolname='description']"));
-        description.sendKeys("Better hammer for better nails");
-
-        WebElement stock = driver.findElement(By.cssSelector("input[formcontrolname='stock']"));
-        stock.sendKeys("1");
+        fillAddProductName();
+        fillAddProductDataWithoutName();
 
         WebElement price = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
+        price.clear();
         price.sendKeys("-12345");
-
-        WebElement itemForRent = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
-        itemForRent.click();
-
-        WebElement brand = driver.findElement(By.cssSelector("select[formcontrolname='brand_id']"));
-        Select brandSelect = new Select(brand);
-        wait.until(d -> brandSelect.getOptions().size() > 1);
-        assertEquals(brandSelect.getOptions().size(), 3);
-        brandSelect.getOptions().stream().filter(option -> option.getText().equals("Brand name 1")).findFirst().orElseThrow().click();
-
-        WebElement category = driver.findElement(By.cssSelector("select[formcontrolname='category_id']"));
-        Select categorySelect = new Select(category);
-        wait.until(d -> categorySelect.getOptions().size() > 1);
-        assertEquals(categorySelect.getOptions().size(), 13);
-        categorySelect.getOptions().stream().filter(option -> option.getText().equals("Hand Tools")).findFirst().orElseThrow().click();
-
-        WebElement image = driver.findElement(By.cssSelector("select[formcontrolname='product_image_id']"));
-        Select imageSelect = new Select(image);
-        wait.until(d -> imageSelect.getOptions().size() > 1);
-        assertEquals(imageSelect.getOptions().size(), 30);
-        assertTrue(imageSelect.getOptions().stream().map(WebElement::getText).toList().contains("Hammer"));
-        imageSelect.getOptions().stream().filter(option -> option.getText().equals("Hammer")).findFirst().orElseThrow().click();
 
         //Submit new product
         WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(),'Save')]"));
@@ -436,5 +312,62 @@ public class ProductTest extends TestBase {
 
         return wait.until(ExpectedConditions
                 .visibilityOfElementLocated(By.cssSelector("div.container[data-test='search_completed']")));
+    }
+
+    private void goToAddProductPage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'John Doe')]")));
+
+        //Go to admin products page
+        WebElement accountButton = driver.findElement(By.xpath("//a[contains(text(),'John Doe')]"));
+        accountButton.click();
+        WebElement adminProductsButton = driver.findElement(By.xpath("//a[contains(text(),'Products')]"));
+        adminProductsButton.click();
+
+        //Click on add new product button
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'Add Product')]")));
+        WebElement addNewProductButton = driver.findElement(By.xpath("//a[contains(text(),'Add Product')]"));
+        addNewProductButton.click();
+    }
+
+    private void fillAddProductName() {
+        WebElement name = driver.findElement(By.cssSelector("input[formcontrolname='name']"));
+        name.sendKeys("Better Hammer");
+    }
+
+    private void fillAddProductDataWithoutName() {
+        WebElement description = driver.findElement(By.cssSelector("textarea[formcontrolname='description']"));
+        description.sendKeys("Better hammer for better nails");
+
+        WebElement stock = driver.findElement(By.cssSelector("input[formcontrolname='stock']"));
+        stock.sendKeys("1");
+
+        WebElement price = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
+        price.sendKeys("12345");
+
+        WebElement itemForRent = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
+        itemForRent.click();
+
+        WebElement brand = driver.findElement(By.cssSelector("select[formcontrolname='brand_id']"));
+        Select brandSelect = new Select(brand);
+        wait.until(d -> brandSelect.getOptions().size() > 1);
+        assertEquals(brandSelect.getOptions().size(), 3);
+        assertTrue(brandSelect.getOptions().stream().map(WebElement::getText).toList().containsAll(List.of("", "Brand name 1", "Brand name 2")));
+        brandSelect.getOptions().stream().filter(option -> option.getText().equals("Brand name 1")).findFirst().orElseThrow().click();
+
+        WebElement category = driver.findElement(By.cssSelector("select[formcontrolname='category_id']"));
+        Select categorySelect = new Select(category);
+        wait.until(d -> categorySelect.getOptions().size() > 1);
+        assertEquals(categorySelect.getOptions().size(), 13);
+        assertTrue(categorySelect.getOptions().stream().map(WebElement::getText).toList().containsAll(List.of(
+                "", "Hand Tools", "Power Tools", "Other", "Hammer", "Hand Saw", "Wrench", "Screwdriver", "Pliers", "Grinder", "Sander", "Saw", "Drill")
+        ));
+        categorySelect.getOptions().stream().filter(option -> option.getText().equals("Hand Tools")).findFirst().orElseThrow().click();
+
+        WebElement image = driver.findElement(By.cssSelector("select[formcontrolname='product_image_id']"));
+        Select imageSelect = new Select(image);
+        wait.until(d -> imageSelect.getOptions().size() > 1);
+        assertEquals(imageSelect.getOptions().size(), 30);
+        assertTrue(imageSelect.getOptions().stream().map(WebElement::getText).toList().contains("Hammer"));
+        imageSelect.getOptions().stream().filter(option -> option.getText().equals("Hammer")).findFirst().orElseThrow().click();
     }
 }
