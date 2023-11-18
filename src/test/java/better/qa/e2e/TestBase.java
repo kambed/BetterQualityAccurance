@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.BeforeClass;
 
-public class TestE2ETest {
+public class TestBase {
 
     protected static final String NAME = "Practice Software Testing - Toolshop - v5.0";
     protected String WEB_URL;

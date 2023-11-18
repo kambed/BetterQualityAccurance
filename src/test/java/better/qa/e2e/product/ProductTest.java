@@ -1,6 +1,6 @@
 package better.qa.e2e.product;
 
-import better.qa.e2e.TestE2ETest;
+import better.qa.e2e.TestBase;
 import jdk.jfr.Description;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -15,7 +15,7 @@ import java.time.Duration;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class ProductE2ETest extends TestE2ETest {
+public class ProductTest extends TestBase {
 
     @BeforeMethod
     public void setUp() {
