@@ -21,7 +21,6 @@ public class ProductTest extends TestBase {
 
     private static final String EXISTING_PHARSE = "hammer";
     private static final String NON_EXISTING_PHARSE = "dasdasd";
-    private static final String UUID = "01HFHBPK5FAY43YKKMCM8JGVF3";
 
     @BeforeMethod
     public void setUp() {
@@ -56,7 +55,7 @@ public class ProductTest extends TestBase {
     @Test
     @Description("ID: PRODUCTS_PUT_CORRECT, Product update with correct data")
     public void editProductWithCorrectData() throws InterruptedException {
-        prepareForProductEdit(UUID);
+        prepareForProductEdit();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@id='name']")));
@@ -94,7 +93,7 @@ public class ProductTest extends TestBase {
     @Test
     @Description("ID: PRODUCTS_PUT_INCORRECT, Product update with incorrect data")
     public void editProductWithInCorrectData() throws InterruptedException {
-        String name = prepareForProductEdit(UUID);
+        String name = prepareForProductEdit();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@id='name']")));
@@ -268,9 +267,8 @@ public class ProductTest extends TestBase {
         input.sendKeys(Keys.ENTER);
     }
 
-    private String prepareForProductEdit(String uuid) throws InterruptedException {
+    private String prepareForProductEdit() throws InterruptedException {
         loginToAdminAccount();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1[data-test='page-title']")));
         driver.get(WEB_URL + "#/admin/products");
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("table.table")));
@@ -278,10 +276,7 @@ public class ProductTest extends TestBase {
 
         WebElement tbody = wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(table, By.tagName("tbody")));
         List<WebElement> rows = tbody.findElements(By.tagName("tr"));
-        WebElement row = rows.stream()
-                .filter(r -> r.getText().contains(uuid))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("No such element"));
+        WebElement row = rows.get(0);
         List<WebElement> columns = row.findElements(By.tagName("td"));
         WebElement buttons = columns.get(4);
         String name = columns.get(1).getText();
@@ -290,7 +285,6 @@ public class ProductTest extends TestBase {
 
         //wait until data is loaded
         Thread.sleep(2000);
-        signOut();
 
         return name;
     }
