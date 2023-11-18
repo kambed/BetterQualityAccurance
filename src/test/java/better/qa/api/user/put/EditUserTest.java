@@ -1,6 +1,6 @@
-package better.qa.user.put;
+package better.qa.api.user.put;
 
-import better.qa.TestBase;
+import better.qa.api.TestBase;
 import better.qa.helpers.JSONReader;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

@@ -1,4 +1,4 @@
-package better.qa;
+package better.qa.api;
 
 import better.qa.helpers.JSONReader;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -12,6 +12,7 @@ import org.testng.annotations.BeforeTest;
 import static io.restassured.RestAssured.given;
 
 public class TestBase {
+
     protected String apiUrl;
     protected String adminToken;
     protected String userToken;
