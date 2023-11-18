@@ -8,7 +8,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
 import java.time.Duration;
@@ -20,6 +19,7 @@ public class TestBase {
     protected String adminEmail;
     protected String adminPassword;
     protected WebDriver driver;
+    protected WebDriverWait wait;
 
     @BeforeClass
     protected void setBaseUri() {
@@ -28,24 +28,45 @@ public class TestBase {
         adminEmail = dotenv.get("ADMIN_EMAIL");
         adminPassword = dotenv.get("ADMIN_PASSWORD");
         driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    protected void loginToAdminAccount() {
+        //Go to login page
+        driver.get(WEB_URL + "/#/auth/login");
+        WebElement email = driver.findElement(By.cssSelector("input[formcontrolname='email']"));
+        WebElement password = driver.findElement(By.cssSelector("input[formcontrolname='password']"));
+
+        //Fill login form
+        email.sendKeys("admin@practicesoftwaretesting.com");
+        password.sendKeys("welcome01");
+
+        //Submit login form
+        WebElement loginButton = driver.findElement(By.cssSelector("input[value='Login']"));
+        loginButton.click();
+
+        //Wait for page to load
+        wait.until(driver -> driver.findElement(By.xpath("//h1[contains(text(),'Sales over the years')]")));
+        driver.get(WEB_URL);
+    }
+
+    protected void signOut() {
+        //Go to home page
+        driver.get(WEB_URL);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'John Doe')]")));
+
+        //Sign out
+        WebElement accountButton = driver.findElement(By.xpath("//a[contains(text(),'John Doe')]"));
+        accountButton.click();
+        WebElement signOutButton = driver.findElement(By.xpath("//a[contains(text(),'Sign out')]"));
+        signOutButton.click();
+
+        driver.get(WEB_URL);
     }
 
     @AfterClass
-    public void tearDown() {
+    protected void tearDown() {
         driver.quit();
-    }
-
-    protected void loginAsAdmin() {
-        driver.get(WEB_URL + "#/auth/login");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        WebElement emailInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[formcontrolname='email']")));
-        emailInput.sendKeys(adminEmail);
-
-        WebElement passwordInput = driver.findElement(By.cssSelector("input[formcontrolname='password']"));
-        passwordInput.sendKeys(adminPassword);
-
-        WebElement loginButton = driver.findElement(By.cssSelector("input[data-test='login-submit']"));
-        loginButton.click();
     }
 }
