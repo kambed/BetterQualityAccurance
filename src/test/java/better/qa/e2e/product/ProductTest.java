@@ -20,6 +20,10 @@ import static org.testng.Assert.*;
 
 public class ProductTest extends TestBase {
 
+    private static final String EXISTING_PHARSE = "hammer";
+    private static final String NON_EXISTING_PHARSE = "dasdasd";
+    private static final String UUID = "01HFHBPK5FAY43YKKMCM8JGVF3";
+
     @BeforeMethod
     public void setUp() {
         driver.get(WEB_URL);
@@ -30,19 +34,17 @@ public class ProductTest extends TestBase {
     @Test
     @Description("ID: PRODUCTS_GET_SEARCH_FOUND, Search for products using an existing phrase")
     public void searchForProductsUsingAnExistingPhrase() {
-        String existingPhrase = "hammer";
-        WebElement containerElement = searchedByPhrase(existingPhrase);
+        WebElement containerElement = searchedByPhrase(EXISTING_PHARSE);
 
         int productCount = containerElement.findElements(By.className("card")).size();
         assertTrue(productCount >= 1);
-        containerElement.findElements(By.className("card")).forEach(card -> assertTrue(card.getText().toLowerCase().contains(existingPhrase)));
+        containerElement.findElements(By.className("card")).forEach(card -> assertTrue(card.getText().toLowerCase().contains(EXISTING_PHARSE)));
     }
 
     @Test
     @Description("ID: PRODUCTS_GET_SEARCH_NOT_FOUND, Search for products by a non-existent phrase")
     public void searchForProductsUsingANonExistingPhrase() {
-        String nonExistingPhrase = "dasdasd";
-        WebElement containerElement = searchedByPhrase(nonExistingPhrase);
+        WebElement containerElement = searchedByPhrase(NON_EXISTING_PHARSE);
 
         int productCount = containerElement.findElements(By.className("card")).size();
         assertEquals(productCount, 0);
@@ -55,7 +57,7 @@ public class ProductTest extends TestBase {
     @Test
     @Description("ID: PRODUCTS_PUT_CORRECT, Product update with correct data")
     public void editProductWithCorrectData() throws InterruptedException {
-        prepareForProductEdit("01HFHBPK5FAY43YKKMCM8JGVF3");
+        prepareForProductEdit(UUID);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -94,7 +96,7 @@ public class ProductTest extends TestBase {
     @Test
     @Description("ID: PRODUCTS_PUT_INCORRECT, Product update with incorrect data")
     public void editProductWithInCorrectData() throws InterruptedException {
-        String name = prepareForProductEdit("01HFHBPK5FAY43YKKMCM8JGVF3");
+        String name = prepareForProductEdit(UUID);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -124,11 +126,6 @@ public class ProductTest extends TestBase {
         int productCount = container.findElements(By.className("card")).size();
         assertEquals(productCount, 1);
         assertTrue(container.findElement(By.className("card")).getText().contains(name));
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
     }
 
     private void checkToastMessage(String xPath, String message) {
@@ -189,7 +186,7 @@ public class ProductTest extends TestBase {
         WebElement h3Element = driver.findElement(By.cssSelector("h3"));
         assertTrue(h3Element.getText().contains(phrase));
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // 10 seconds timeout
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         return wait.until(ExpectedConditions
                 .visibilityOfElementLocated(By.cssSelector("div.container[data-test='search_completed']")));
