@@ -49,15 +49,11 @@ public class ProductsPutTest extends ProductTestBase {
 
         WebElement saveButton = driver.findElement(By.cssSelector("button.btn.btn-primary"));
         saveButton.click();
-        boolean productUpdatedSuccessfullyIsContained = wait
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.xpath("/html/body/app-root/div/app-products-add-edit/div/form/div[3]/div/div")
-                        )
-                )
-                .getText()
-                .contains("Product updated successfully");
-        assertTrue(productUpdatedSuccessfullyIsContained);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert-success")));
+        WebElement successAlert = driver.findElement(By.className("alert-success"));
+        assertTrue(successAlert.getText().contains("Product saved!"));
+
         By toastLocator = By.xpath("/html/body/app-root/app-toasts");
         boolean isToastVisible = wait.until(isToastPresent(toastLocator));
         assertTrue(isToastVisible);
