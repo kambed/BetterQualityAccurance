@@ -2,7 +2,6 @@ package better.qa.e2e.product;
 
 import better.qa.e2e.TestBase;
 import jdk.jfr.Description;
-import org.awaitility.Awaitility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -14,7 +13,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
-
 import static org.testng.Assert.*;
 
 public class ProductTest extends TestBase {
@@ -27,6 +25,73 @@ public class ProductTest extends TestBase {
         driver.get(WEB_URL);
         String pageTitle = driver.getTitle();
         assertEquals(pageTitle, NAME);
+    }
+
+    @Test
+    @Description("ID: PRODUCTS_GET_ALL, Get all products")
+    public void getAllProducts() {
+        WebElement containerElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("app-overview div.container"))
+        );
+
+        int productCount = containerElement.findElements(By.cssSelector("a.card")).size();
+        assertTrue(productCount >= 1);
+    }
+
+    @Test
+    @Description("ID: PRODUCT_GET_EXIST, Get an existing product")
+    public void getAnExistingProduct() {
+        WebElement firstProductOnHomepage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("app-overview div.container a.card"))
+        );
+        firstProductOnHomepage.click();
+
+        waitUntilDataLoaded();
+
+        WebElement detailElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("app-detail")
+        ));
+        List<WebElement> childElements = detailElement.findElements(By.xpath("./*"));
+        assertEquals(childElements.size(), 3);
+        assertEquals(childElements.get(0).getTagName(), "div");
+        assertEquals(childElements.get(1).getTagName(), "hr");
+        assertEquals(childElements.get(2).getTagName(), "div");
+    }
+
+    @Test
+    @Description("ID: PRODUCT_GET_NOT_EXIST, Get a non-existing product")
+    public void getANonExistingProduct() {
+        driver.get(WEB_URL + "#/product/not-existing-product");
+        waitUntilDataLoaded();
+        WebElement detailElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("app-detail")
+        ));
+        List<WebElement> childElements = detailElement.findElements(By.xpath("./*"));
+
+        assertTrue(
+                childElements.size() != 3
+                || !childElements.get(0).getTagName().equals("div")
+                || !childElements.get(1).getTagName().equals("hr")
+                || !childElements.get(2).getTagName().equals("div")
+        );
+    }
+
+    @Test
+    @Description("ID: PRODUCT_DELETE_EXISTS, Delete an existing product")
+    public void deleteAnExistingProduct() {
+        loginToAdminAccount();
+        driver.get(WEB_URL + "#/admin/products");
+
+        WebElement firstRow = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("table > tbody > tr")));
+        String id = firstRow.findElement(By.cssSelector("td:nth-child(1)")).getText();
+
+        WebElement deleteButton = firstRow.findElement(By.cssSelector("button.btn-danger"));
+        deleteButton.click();
+
+        firstRow = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("table > tbody > tr")));
+        String newId = firstRow.findElement(By.cssSelector("td:nth-child(1)")).getText();
+
+        assertNotEquals(id, newId);
     }
 
     @Test
@@ -291,8 +356,7 @@ public class ProductTest extends TestBase {
         WebElement editButton = buttons.findElement(By.cssSelector("a.btn.btn-sm.btn-primary"));
         editButton.click();
 
-        //wait until data is loaded
-        Awaitility.await().atMost(2, java.util.concurrent.TimeUnit.SECONDS);
+        waitUntilDataLoaded();
 
         return name;
     }
