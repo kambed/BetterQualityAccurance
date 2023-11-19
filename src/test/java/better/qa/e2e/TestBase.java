@@ -1,6 +1,7 @@
 package better.qa.e2e;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.awaitility.Awaitility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class TestBase {
 
@@ -63,6 +65,10 @@ public class TestBase {
         signOutButton.click();
 
         driver.get(WEB_URL);
+    }
+
+    protected void waitUntilDataLoaded() {
+        Awaitility.with().pollDelay(2000, TimeUnit.MILLISECONDS).await().until(() -> true);
     }
 
     @AfterClass
