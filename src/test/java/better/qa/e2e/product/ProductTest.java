@@ -289,7 +289,10 @@ public class ProductTest extends TestBase {
     }
 
     private static ExpectedCondition<Boolean> isToastPresent(By locator) {
-        return driver -> !driver.findElements(locator).isEmpty();
+        return driver -> {
+            assert driver != null;
+            return !driver.findElements(locator).isEmpty();
+        };
     }
 
     private WebElement searchedByPhrase(String phrase) {
