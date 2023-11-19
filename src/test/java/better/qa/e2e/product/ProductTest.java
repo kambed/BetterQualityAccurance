@@ -2,6 +2,7 @@ package better.qa.e2e.product;
 
 import better.qa.e2e.TestBase;
 import jdk.jfr.Description;
+import org.awaitility.Awaitility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -53,7 +54,7 @@ public class ProductTest extends TestBase {
 
     @Test
     @Description("ID: PRODUCTS_PUT_CORRECT, Product update with correct data")
-    public void editProductWithCorrectData() throws InterruptedException {
+    public void editProductWithCorrectData() {
         prepareForProductEdit();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -91,7 +92,7 @@ public class ProductTest extends TestBase {
 
     @Test
     @Description("ID: PRODUCTS_PUT_INCORRECT, Product update with incorrect data")
-    public void editProductWithInCorrectData() throws InterruptedException {
+    public void editProductWithInCorrectData() {
         String name = prepareForProductEdit();
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -266,7 +267,7 @@ public class ProductTest extends TestBase {
         input.sendKeys(Keys.ENTER);
     }
 
-    private String prepareForProductEdit() throws InterruptedException {
+    private String prepareForProductEdit() {
         loginToAdminAccount();
         driver.get(WEB_URL + "#/admin/products");
 
@@ -283,7 +284,7 @@ public class ProductTest extends TestBase {
         editButton.click();
 
         //wait until data is loaded
-        Thread.sleep(2000);
+        Awaitility.await().atMost(2, java.util.concurrent.TimeUnit.SECONDS);
 
         return name;
     }
