@@ -18,6 +18,7 @@ public class ProductsGetRelatedProductsTest extends ProductTestBase {
     @Description("ID: PRODUCTS_GET_RELATED_PRODUCTS_FOR_EXISTING_PRODUCT, Get related products for an existing product")
     public void getRelatedProductsForAnExistingProduct() {
         //Wait for API data to be loaded
+        driver.get(WEB_URL);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[data-test].container")));
         WebElement productsContainer = driver.findElement(By.cssSelector("div[data-test].container"));
         wait.until(d -> !productsContainer.findElements(By.className("card")).isEmpty());
