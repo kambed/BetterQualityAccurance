@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.testng.Assert.*;
 
@@ -25,7 +26,8 @@ public class ProductsPutTest extends ProductTestBase {
     @Test
     @Description("ID: PRODUCTS_PUT_CORRECT, Product update with correct data")
     public void editProductWithCorrectData() {
-        prepareForProductEdit();
+        String name = "Bolt Cutters";
+        prepareForProductEdit(name);
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@id='name']")));
@@ -67,7 +69,8 @@ public class ProductsPutTest extends ProductTestBase {
     @Test
     @Description("ID: PRODUCTS_PUT_INCORRECT, Product update with incorrect data")
     public void editProductWithInCorrectData() {
-        String name = prepareForProductEdit();
+        String name = "Long Nose Pliers";
+        prepareForProductEdit(name);
 
         WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[@id='name']")));
@@ -114,7 +117,7 @@ public class ProductsPutTest extends ProductTestBase {
         input.sendKeys(Keys.ENTER);
     }
 
-    private String prepareForProductEdit() {
+    private void prepareForProductEdit(String name) {
         loginToAdminAccount();
         driver.get(WEB_URL + "#/admin/products");
 
@@ -123,16 +126,16 @@ public class ProductsPutTest extends ProductTestBase {
 
         WebElement tbody = wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(table, By.tagName("tbody")));
         List<WebElement> rows = tbody.findElements(By.tagName("tr"));
-        WebElement row = rows.get(0);
+
+        WebElement row = rows.stream().filter(r -> {
+            List<WebElement> columns = r.findElements(By.tagName("td"));
+            return columns.get(1).getText().equals(name);
+        }).findFirst().orElseThrow(() -> new NoSuchElementException("No such element"));
         List<WebElement> columns = row.findElements(By.tagName("td"));
         WebElement buttons = columns.get(4);
-        String name = columns.get(1).getText();
         WebElement editButton = buttons.findElement(By.cssSelector("a.btn.btn-sm.btn-primary"));
         editButton.click();
-
         waitUntilDataLoaded();
-
-        return name;
     }
 
     private static ExpectedCondition<Boolean> isToastPresent(By locator) {
