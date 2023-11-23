@@ -130,7 +130,7 @@ public class ProductsPutTest extends ProductTestBase {
         WebElement row = rows.stream().filter(r -> {
             List<WebElement> columns = r.findElements(By.tagName("td"));
             return columns.get(1).getText().equals(name);
-        }).findFirst().orElseThrow(() -> new NoSuchElementException("No such element"));
+        }).findFirst().orElseThrow(() -> new NoSuchElementException("No such element with name %s. Make sure that the database data has not changed".formatted(name)));
         List<WebElement> columns = row.findElements(By.tagName("td"));
         WebElement buttons = columns.get(4);
         WebElement editButton = buttons.findElement(By.cssSelector("a.btn.btn-sm.btn-primary"));
