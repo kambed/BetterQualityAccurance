@@ -31,18 +31,30 @@ public class PostProductBddTest extends BddTestBase {
 
     @When("User fills in product details without name")
     public void userFillsInProductDetailsWithoutName() {
-        //Fill in product details
         fillAddProductDataWithoutName();
+    }
 
-        //Submit new product
+    @When("User submits new product")
+    public void userSubmitsNewProduct() {
         WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(),'Save')]"));
         submitButton.click();
     }
 
-    @Then("Error message is displayed")
-    public void errorMessageIsDisplayed() {
+    @When("User fills in product details with negative price")
+    public void userFillsInProductDetailsWithNegativePrice() {
+        WebElement name = driver.findElement(By.cssSelector("input[formcontrolname='name']"));
+        name.sendKeys("Better Hammer");
+        fillAddProductDataWithoutName();
+
+        WebElement price = driver.findElement(By.cssSelector("input[formcontrolname='price']"));
+        price.clear();
+        price.sendKeys("-12345");
+    }
+
+    @Then("Error message {string} is displayed")
+    public void errorMessageIsDisplayed(String message) {
         //Check if error message is displayed
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Name is required')]")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + message + "')]")));
     }
 
     @After
