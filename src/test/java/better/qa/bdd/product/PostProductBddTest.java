@@ -28,7 +28,7 @@ public class PostProductBddTest extends BddTestBase {
 
     @When("User fills product name with {string}")
     public void userFillsProductNameWith(String productName) {
-        fillProductData("name", productName);
+        fillProductDataInput("name", productName);
     }
 
     @And("User fills product description with {string}")
@@ -39,12 +39,12 @@ public class PostProductBddTest extends BddTestBase {
 
     @And("User fills product stock with {string}")
     public void userFillsProductStockWith(String productStock) {
-        fillProductData("stock", productStock);
+        fillProductDataInput("stock", productStock);
     }
 
     @And("User fills product price with {string}")
     public void userFillsProductPriceWith(String productPrice) {
-        fillProductData("price", productPrice);
+        fillProductDataInput("price", productPrice);
     }
 
     @And("User selects product brand {string}")
@@ -80,26 +80,6 @@ public class PostProductBddTest extends BddTestBase {
     @After
     public void tearDown() {
         super.tearDown();
-    }
-
-    private void goToAddProductPage() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'John Doe')]")));
-
-        //Go to admin products page
-        WebElement accountButton = driver.findElement(By.xpath("//a[contains(text(),'John Doe')]"));
-        accountButton.click();
-        WebElement adminProductsButton = driver.findElement(By.xpath("//a[contains(text(),'Products')]"));
-        adminProductsButton.click();
-
-        //Click on add new product button
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'Add Product')]")));
-        WebElement addNewProductButton = driver.findElement(By.xpath("//a[contains(text(),'Add Product')]"));
-        addNewProductButton.click();
-    }
-
-    private void fillProductData(String field, String value) {
-        WebElement name = driver.findElement(By.cssSelector("input[formcontrolname='" + field + "']"));
-        name.sendKeys(value);
     }
 
     private void selectProductData(String field, String value) {

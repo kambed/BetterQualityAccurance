@@ -5,5 +5,5 @@ Feature: Update product
     And User edits the product name to "updated product name"
     And User edits the product description to "New Product Description"
     And User saves the changes
-    Then Product saved message should be displayed
+    Then Success message "Product saved!" should be displayed
     And The product's name should be "updated product name"

@@ -14,6 +14,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 public class PutProductBddTest extends BddTestBase {
 
     @Before
@@ -34,40 +37,40 @@ public class PutProductBddTest extends BddTestBase {
 
     @And("User edits the product name to {string}")
     public void userEditsTheProductNameTo(String newProductName) {
-        System.out.printf("xd");
+        fillProductDataInput("name", newProductName);
     }
 
     @And("User edits the product description to {string}")
     public void userEditsTheProductDescriptionTo(String description) {
+        fillProductDataTextArea("description", description);
     }
 
     @And("User saves the changes")
     public void userSavesTheChanges() {
-
+        WebElement saveButton = driver.findElement(By.cssSelector("button.btn.btn-primary"));
+        saveButton.click();
     }
 
-    @Then("Product saved message should be displayed")
-    public void productSavedMessageShouldBeDisplayed() {
-
+    @Then("Success message {string} should be displayed")
+    public void successMessageShouldBeDisplayed(String message) {
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//*[contains(text(),'" + message + "')]")
+                )
+        );
     }
 
     @And("The product's name should be {string}")
     public void theProductSNameShouldBe(String updatedProductName) {
+        WebElement container = searchedByPhrase(updatedProductName);
+        int productCount = container.findElements(By.className("card")).size();
+        assertEquals(productCount, 1);
+        assertTrue(container.findElement(By.className("card")).getText().contains(updatedProductName));
     }
 
     @After
     public void tearDown() {
         super.tearDown();
-    }
-
-    private void goToProductPage() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'John Doe')]")));
-
-        //Go to admin products page
-        WebElement accountButton = driver.findElement(By.xpath("//a[contains(text(),'John Doe')]"));
-        accountButton.click();
-        WebElement adminProductsButton = driver.findElement(By.xpath("//a[contains(text(),'Products')]"));
-        adminProductsButton.click();
     }
 
     private void selectProductData(String productName) {
