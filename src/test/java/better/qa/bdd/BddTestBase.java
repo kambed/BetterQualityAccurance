@@ -1,6 +1,7 @@
 package better.qa.bdd;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.awaitility.Awaitility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class BddTestBase {
 
@@ -43,6 +45,10 @@ public class BddTestBase {
         //Wait for page to load
         wait.until(driver -> driver.findElement(By.xpath("//h1[contains(text(),'Sales over the years')]")));
         driver.get(WEB_URL);
+    }
+
+    protected void waitUntilDataLoaded() {
+        Awaitility.with().pollDelay(2000, TimeUnit.MILLISECONDS).await().until(() -> true);
     }
 
     protected void tearDown() {
